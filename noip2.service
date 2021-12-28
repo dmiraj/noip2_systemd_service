@@ -1,0 +1,20 @@
+# This file is a service for noip2. It will start and monitor that the binary the program keeps running.
+[Unit]
+Description=noip2 DNS dynamic update client 
+After=network-online.target
+Wants=network-online.target
+
+[Install]
+WantedBy=default.target
+
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/noip2
+Restart=on-failure
+GuessMainPID=yes
+
+# The following will kill the unit.
+KillMode=control-group
+# The initial signal sent by systemd is SIGTERM, followed by SIGHUP then SIGKILLED (the final kill signal).
+FinalKillSignal=SIGTERM # noip2 binary will exit when two SIGTERMs are received.
